@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1263256107087104714}
   - component: {fileID: 169535878669500799}
   m_Layer: 0
-  m_Name: BlueBook
+  m_Name: GreenBook
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: -520118160, guid: c37e7804dd5605b43b371e991915237d, type: 3}
+  m_Sprite: {fileID: 1368882322, guid: c37e7804dd5605b43b371e991915237d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -165,4 +165,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45b6a5e31f3ab7d48b4e182672e4148e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
+  type: 5
