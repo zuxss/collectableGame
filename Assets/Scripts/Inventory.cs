@@ -16,7 +16,7 @@ public class Inventory
         public Slot()
         {
             count = 0;
-            maxQuantity = 1;
+            maxQuantity = 20;
             type = CollectableType.NONE;
         }
         //Check if can add based on quantity

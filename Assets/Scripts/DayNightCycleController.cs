@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 public class DayNightCycleController : MonoBehaviour
 {
     [SerializeField] private Light2D globalLight;
     [SerializeField] private List<DayNight> dayNightCycles;
+    [SerializeField] private DayNightCycleBar dayNightCycleBar;
 
     public float actualCycleDuration;
     private float cyclePercentage;
@@ -14,7 +16,8 @@ public class DayNightCycleController : MonoBehaviour
     private int nextCycleIndex = 1;
     public float delayBeforeNextCycle = 0;
     private bool isWaitingForCycleChange = false;
-
+    private int dayNightTimeBar = 1;
+    public Gradient gradient;
     private void Start()
     {
         actualCycleDuration = dayNightCycles[currentCycleIndex].cycleDuration;
@@ -24,25 +27,31 @@ public class DayNightCycleController : MonoBehaviour
 
     private void Update()
     {
+       
         if (!isWaitingForCycleChange)
         {
             if (actualCycleDuration > 0)
             {
                 actualCycleDuration -= Time.deltaTime;
                 UpdateCyclePercentage();
-                globalLight.color = Color.Lerp(dayNightCycles[currentCycleIndex].cycleColor, dayNightCycles[nextCycleIndex].cycleColor, Mathf.SmoothStep(0f, 1f, cyclePercentage));
+                globalLight.color = Color.Lerp(dayNightCycles[currentCycleIndex].cycleColor, dayNightCycles[nextCycleIndex].cycleColor, cyclePercentage);
+               dayNightCycleBar.sliderController(dayNightTimeBar);
             }
+
             else
             {
+                
                 StartCoroutine(ChangeCycleWithDelay());
+                
             }
+            
         }
     }
 
     private void UpdateCyclePercentage()
     {
         cyclePercentage = 1 - (actualCycleDuration / dayNightCycles[currentCycleIndex].cycleDuration);
-        cyclePercentage = Mathf.Clamp01(cyclePercentage); // Ensure the percentage is between 0 and 1
+       
     }
 
     private IEnumerator ChangeCycleWithDelay()
@@ -51,9 +60,11 @@ public class DayNightCycleController : MonoBehaviour
         yield return new WaitForSeconds(delayBeforeNextCycle);
         currentCycleIndex = nextCycleIndex;
         nextCycleIndex++;
+        dayNightTimeBar++;
         if (nextCycleIndex >= dayNightCycles.Count)
         {
             nextCycleIndex = 0;
+            dayNightTimeBar = 0;
         }
         isWaitingForCycleChange = false;
         actualCycleDuration = dayNightCycles[currentCycleIndex].cycleDuration;

@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public Transform player; // Referencia al transform del jugador
+    [SerializeField] public Transform player; // Referencia al transform del jugador
 
+
+    void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+    }
     void FixedUpdate()
     {
         if (player != null)
