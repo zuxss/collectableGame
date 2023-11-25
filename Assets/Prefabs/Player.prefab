@@ -224,3 +224,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxLifePoints: 6
   currentLifePoints: 0
+  healthBar: {fileID: 0}

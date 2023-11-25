@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy_Slime
   - Player_01
+  - HealthBar
   layers:
   - Default
   - TransparentFX

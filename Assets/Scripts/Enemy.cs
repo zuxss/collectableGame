@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class Enemy: MonoBehaviour
 {
-    public int health;
+    public float health;
     public int damage;
     public int speed;
     public float chaseRange;
     public float pushForce;
     public int attackSpeed;
     public int attackRange;
+    public Animator animator;
     public PlayerHealth playerHealth;
     [SerializeField] public Transform player;
 
@@ -21,6 +22,7 @@ public class Enemy: MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
+        animator = GetComponent<Animator>();
     }
 
 
@@ -29,10 +31,12 @@ public class Enemy: MonoBehaviour
         if (player != null)
         {
             float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+            animator.SetBool("isMoving", false);
 
             if (distanceToPlayer <= chaseRange)
             {
                 ChasePlayer();
+               
             }
         }
        
@@ -46,10 +50,11 @@ public class Enemy: MonoBehaviour
         {
             Vector3 direction = (player.position - transform.position).normalized;
             transform.Translate(direction * speed * Time.deltaTime);
+            AnimateMovement(direction);
         }
         
     }
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         health -= damage;
         if (health <= 0)
@@ -66,6 +71,20 @@ public class Enemy: MonoBehaviour
     public void Move()
     {
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
+    }
+
+    void AnimateMovement(Vector3 direction)
+    {
+        if (animator != null)
+        {
+            bool isMoving = direction != Vector3.zero;
+
+            // Establece el parámetro "isMoving" en el valor calculado
+            animator.SetBool("isMoving", isMoving);
+
+
+        }
+        
     }
 }
 

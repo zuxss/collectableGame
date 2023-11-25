@@ -17,7 +17,7 @@ public class DayNightCycleController : MonoBehaviour
     public float delayBeforeNextCycle = 0;
     private bool isWaitingForCycleChange = false;
     private int dayNightTimeBar = 1;
-    public Gradient gradient;
+  
     private void Start()
     {
         actualCycleDuration = dayNightCycles[currentCycleIndex].cycleDuration;
