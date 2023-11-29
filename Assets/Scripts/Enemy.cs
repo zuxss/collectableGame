@@ -12,10 +12,12 @@ public class Enemy: MonoBehaviour
     public int attackSpeed;
     public int attackRange;
     public Animator animator;
+    public Animator playerHit;
     public PlayerHealth playerHealth;
+    public AudioSource audioSource;
     [SerializeField] public Transform player;
-
-   
+  
+    bool sound = false;
 
 
     public void Start()
@@ -23,6 +25,8 @@ public class Enemy: MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform;
         playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
         animator = GetComponent<Animator>();
+        playerHit = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
 
@@ -32,11 +36,13 @@ public class Enemy: MonoBehaviour
         {
             float distanceToPlayer = Vector3.Distance(transform.position, player.position);
             animator.SetBool("isMoving", false);
-
+            
             if (distanceToPlayer <= chaseRange)
             {
                 ChasePlayer();
                
+                
+
             }
         }
        
@@ -50,40 +56,62 @@ public class Enemy: MonoBehaviour
         {
             Vector3 direction = (player.position - transform.position).normalized;
             transform.Translate(direction * speed * Time.deltaTime);
+
             AnimateMovement(direction);
-        }
-        
-    }
-    public void TakeDamage(float damage)
-    {
-        health -= damage;
-        if (health <= 0)
-        {
-            Die();
+            walkSound();
+
         }
     }
 
-    public void Die()
-    {
-        Destroy(gameObject);
-    }
-
-    public void Move()
-    {
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
-    }
-
-    void AnimateMovement(Vector3 direction)
-    {
-        if (animator != null)
+        public void TakeDamage(float damage)
         {
-            bool isMoving = direction != Vector3.zero;
+            health -= damage;
+            if (health <= 0)
+            {
+                Die();
+            }
+        }
 
+        public void Die()
+        {
+            Destroy(gameObject);
+        }
+
+        public void Move()
+        {
+            transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        }
+
+        void AnimateMovement(Vector3 direction)
+        {
+            if (animator != null)
+            {
+                bool isMoving = direction != Vector3.zero;
+                
+            
             // Establece el parámetro "isMoving" en el valor calculado
             animator.SetBool("isMoving", isMoving);
+            
 
+            }
 
         }
+
+    void walkSound()
+    {
+        if (!sound)
+        {   
+            sound = true;
+            audioSource.Play();
+            Invoke("stopWalkSound", 1f);
+        }
+        
+        
+    }
+    
+    void stopWalkSound()
+    {
+        sound = false;
         
     }
 }

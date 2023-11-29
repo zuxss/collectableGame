@@ -11,15 +11,13 @@ public class EnemySlime : Enemy
         if (collision.gameObject.CompareTag("Player"))
         {
             // Aplica el daño al jugador
+           
             DealDamage(collision.gameObject);
-            Vector3 playerPosition = collision.transform.position;
-
-            // Calcula la dirección del empuje (asumiendo movimiento hacia la izquierda)
-            Vector3 pushDirection = Vector3.left;
-
-            // Mueve al jugador en la dirección del empuje y la distancia especificada
-            collision.transform.position = playerPosition + pushDirection * pushForce;
+            
+          
         }
+       
+
     }
 
     private void DealDamage(GameObject player)
@@ -28,7 +26,9 @@ public class EnemySlime : Enemy
        
         if (playerHealth != null)
         {
+            playerHit.SetTrigger("isHit");
             playerHealth.TakeDamage(damage);
+            
         }
     }
 

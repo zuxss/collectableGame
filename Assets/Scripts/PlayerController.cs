@@ -8,10 +8,13 @@ public class PlayerController : MonoBehaviour
     private float speed = 2.5f;
     public Animator animator;
     
+    public PlayerSoundEffect walkSoundEffect;
+    
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
+        
     }
 
     // Update is called once per frame
@@ -21,8 +24,10 @@ public class PlayerController : MonoBehaviour
         float verticalInput= Input.GetAxisRaw("Vertical");
      
         Vector3 direction = new Vector3(horizontalInput,verticalInput);
+        WalkSound();
         AnimateMovement(direction);
         transform.position += direction * speed * Time.deltaTime;
+
     }
 
     void AnimateMovement(Vector3 direction)
@@ -33,21 +38,42 @@ public class PlayerController : MonoBehaviour
             {
                 animator.SetBool("isMovingRight", true );
                 animator.SetBool("isMovingLeft", false);
+                
 
             }
             else if (direction.x < 0)
             {
                 animator.SetBool("isMovingLeft", true);
                 animator.SetBool("isMovingRight", false);
+                
+               
+
             }
             else
             {
                 animator.SetBool("isMovingRight", false );
                 animator.SetBool("isMovingLeft", false);
+              
             }
             
             
         }
         
     }
+
+    private void WalkSound()
+    {
+        if(Input.GetButton("Horizontal") || Input.GetButton("Vertical"))
+        {
+            walkSoundEffect.PlayAudio();
+         
+        }
+        else
+        {
+          walkSoundEffect.StopAudio();
+        }
+    }
+            
+       
+    
 }
