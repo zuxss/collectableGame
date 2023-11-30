@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     
-    private float speed = 2.5f;
+    public float speed = 2f;
     public Animator animator;
     
     public PlayerSoundEffect walkSoundEffect;
