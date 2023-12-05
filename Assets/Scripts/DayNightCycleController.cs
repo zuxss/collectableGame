@@ -1,18 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
-using UnityEngine.UI;
+
 
 public class DayNightCycleController : MonoBehaviour
 {
     [SerializeField] private Light2D globalLight;
     [SerializeField] private List<DayNight> dayNightCycles;
     [SerializeField] private DayNightCycleBar dayNightCycleBar;
+    public event Action<int> OnCycleChanged;
 
     public float actualCycleDuration;
     private float cyclePercentage;
-    private int currentCycleIndex = 0;
+    public int currentCycleIndex = 0;
     private int nextCycleIndex = 1;
     public float delayBeforeNextCycle = 0;
     private bool isWaitingForCycleChange = false;
@@ -23,6 +25,7 @@ public class DayNightCycleController : MonoBehaviour
         actualCycleDuration = dayNightCycles[currentCycleIndex].cycleDuration;
         UpdateCyclePercentage();
         globalLight.color = dayNightCycles[currentCycleIndex].cycleColor;
+        NotifyCycleChanged(currentCycleIndex);
     }
 
     private void Update()
@@ -35,7 +38,8 @@ public class DayNightCycleController : MonoBehaviour
                 actualCycleDuration -= Time.deltaTime;
                 UpdateCyclePercentage();
                 globalLight.color = Color.Lerp(dayNightCycles[currentCycleIndex].cycleColor, dayNightCycles[nextCycleIndex].cycleColor, cyclePercentage);
-               dayNightCycleBar.sliderController(dayNightTimeBar);
+                dayNightCycleBar.sliderController(dayNightTimeBar);
+              
             }
 
             else
@@ -61,6 +65,7 @@ public class DayNightCycleController : MonoBehaviour
         currentCycleIndex = nextCycleIndex;
         nextCycleIndex++;
         dayNightTimeBar++;
+        NotifyCycleChanged(currentCycleIndex);
         if (nextCycleIndex >= dayNightCycles.Count)
         {
             nextCycleIndex = 0;
@@ -68,6 +73,12 @@ public class DayNightCycleController : MonoBehaviour
         }
         isWaitingForCycleChange = false;
         actualCycleDuration = dayNightCycles[currentCycleIndex].cycleDuration;
+    }
+
+    private void NotifyCycleChanged(int newCycleIndex)
+    {
+        // Disparar el evento cuando cambie el ciclo
+        OnCycleChanged?.Invoke(newCycleIndex);
     }
 }
 

@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class Inventory 
 {
+   
     [System.Serializable]
     public class Slot
     {
@@ -28,6 +31,7 @@ public class Inventory
         public void Add(CollectableType type)
         {
             count++;
+           
         }
     }
     //Create a list of slots
@@ -52,6 +56,7 @@ public class Inventory
             if (existingSlot.CanAdd())
             {
                 existingSlot.count++;
+              
                 return true;
             }
             else

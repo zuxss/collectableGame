@@ -101,10 +101,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48765b7f4a38c3b4aaed20d71262f1bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 2
+  health: 3
   damage: 1
   speed: 1
-  chaseRange: 2
+  chaseRange: 2.5
   pushForce: 0
   attackSpeed: 0
   attackRange: 0

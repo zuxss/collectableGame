@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Enemy: MonoBehaviour
 {
     public float health;
     public int damage;
-    public int speed;
+    public float speed;
     public float chaseRange;
     public float pushForce;
     public int attackSpeed;
@@ -16,18 +17,23 @@ public class Enemy: MonoBehaviour
     public PlayerHealth playerHealth;
     public AudioSource audioSource;
     [SerializeField] public Transform player;
-  
+ 
     bool sound = false;
 
 
-    public void Start()
+    public void OnEnable()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
         animator = GetComponent<Animator>();
         playerHit = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
+        animator.enabled = true;
+
+
     }
+
+    
 
 
     void Update()
@@ -35,15 +41,18 @@ public class Enemy: MonoBehaviour
         if (player != null)
         {
             float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-            animator.SetBool("isMoving", false);
-            
+
+            animator.SetBool("isWalkingRight", false);
+            animator.SetBool("isWalkingLeft", false);
             if (distanceToPlayer <= chaseRange)
             {
                 ChasePlayer();
-               
-                
-
+              
             }
+            
+            
+           
+         
         }
        
 
@@ -56,14 +65,35 @@ public class Enemy: MonoBehaviour
         {
             Vector3 direction = (player.position - transform.position).normalized;
             transform.Translate(direction * speed * Time.deltaTime);
-
             AnimateMovement(direction);
             walkSound();
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Verifica si el objeto con el que colisionó es el jugador
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            // Aplica el daño al jugador
+            DealDamage(collision.gameObject);
+        }
+
+
+    }
+
+    private void DealDamage(GameObject player)
+    {
+
+        if (playerHealth != null)
+        {
+            playerHit.SetTrigger("isHit");
+            playerHealth.TakeDamage(damage);
 
         }
     }
 
-        public void TakeDamage(float damage)
+    public void TakeDamage(float damage)
         {
             health -= damage;
             if (health <= 0)
@@ -82,20 +112,19 @@ public class Enemy: MonoBehaviour
             transform.Translate(Vector3.forward * speed * Time.deltaTime);
         }
 
-        void AnimateMovement(Vector3 direction)
+    public void AnimateMovement(Vector3 direction)
+    {
+        if (animator != null)
         {
-            if (animator != null)
-            {
-                bool isMoving = direction != Vector3.zero;
-                
-            
-            // Establece el parámetro "isMoving" en el valor calculado
-            animator.SetBool("isMoving", isMoving);
-            
+           
 
-            }
+            animator.SetBool("isWalkingRight",direction.x > 0 );
+            animator.SetBool("isWalkingLeft", direction.x < 0);
+            
 
         }
+
+    }
 
     void walkSound()
     {
