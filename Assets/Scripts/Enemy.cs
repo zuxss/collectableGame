@@ -48,14 +48,10 @@ public class Enemy: MonoBehaviour
             {
                 ChasePlayer();
               
-            }
-            
-            
-           
+            }           
          
         }
-       
-
+   
     }
 
     void ChasePlayer()
@@ -107,10 +103,7 @@ public class Enemy: MonoBehaviour
             Destroy(gameObject);
         }
 
-        public void Move()
-        {
-            transform.Translate(Vector3.forward * speed * Time.deltaTime);
-        }
+       
 
     public void AnimateMovement(Vector3 direction)
     {

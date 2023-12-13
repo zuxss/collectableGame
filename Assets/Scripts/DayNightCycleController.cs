@@ -26,6 +26,7 @@ public class DayNightCycleController : MonoBehaviour
         UpdateCyclePercentage();
         globalLight.color = dayNightCycles[currentCycleIndex].cycleColor;
         NotifyCycleChanged(currentCycleIndex);
+       
     }
 
     private void Update()

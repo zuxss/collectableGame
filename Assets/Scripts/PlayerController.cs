@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     
     public float speed = 2f;
     public Animator animator;
-    
+    public static PlayerController Instance;
     public PlayerSoundEffect walkSoundEffect;
     
     // Start is called before the first frame update
@@ -15,6 +15,14 @@ public class PlayerController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         
+        if (Instance != null)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+        Instance = this;
+        GameObject.DontDestroyOnLoad(this.gameObject);
+
     }
 
     // Update is called once per frame
@@ -23,10 +31,11 @@ public class PlayerController : MonoBehaviour
         float horizontalInput= Input.GetAxisRaw("Horizontal");
         float verticalInput= Input.GetAxisRaw("Vertical");
      
-        Vector3 direction = new Vector3(horizontalInput,verticalInput);
+        Vector3 direction = new Vector3(horizontalInput,verticalInput).normalized;
         WalkSound();
         AnimateMovement(direction);
-        transform.position += direction * speed * Time.deltaTime;
+        transform.position += direction * speed * Time.fixedDeltaTime;
+
 
     }
 

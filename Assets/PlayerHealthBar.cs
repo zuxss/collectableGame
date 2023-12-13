@@ -5,17 +5,26 @@ using UnityEngine.UI;
 
 public class PlayerHealthBar : MonoBehaviour
 {
-    private Slider slider;
-  
-    private void Awake()
+    [SerializeField]  private Slider slider;
+    [SerializeField] private PlayerHealth playerHealth;
+
+    private void Start()
     {
         slider = GetComponent<Slider>();
-       
+        playerHealth = GameObject.Find("Player").GetComponent<PlayerHealth>();
+        InitialateHealthBar(playerHealth.maxLifePoints);
     }
+
+    void Update()
+    {
+        ChangeLifePoints(playerHealth.currentLifePoints);
+    }
+ 
 
     public void MaxLifePoints(float maxLifePoints)
     {
         slider.maxValue = maxLifePoints;
+        
     }
 
     public void ChangeLifePoints(float currentLifePoints)

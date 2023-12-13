@@ -6,26 +6,31 @@ public class PlayerHealth : MonoBehaviour
 {
     public float maxLifePoints ;
     public float currentLifePoints;
-    [SerializeField] private PlayerHealthBar healthBar;
+    public PlayerRespawn playerRespawn;
+    
+   
+
     void Start()
     {
         currentLifePoints = maxLifePoints;
-        healthBar.InitialateHealthBar(currentLifePoints);
-      
+     playerRespawn = GetComponent<PlayerRespawn>();
       
     }
-
+  
   
     public void TakeDamage(float damage)
     {
         currentLifePoints -= damage;
-        healthBar.ChangeLifePoints(currentLifePoints);
+     
         if (currentLifePoints <= 0)
         {
-            Destroy(gameObject);
-            GameManager.Instance.GameOver();
+            playerRespawn.Respawn(); 
         }
     }
 
+    public void ResetHealth()
+    {
+        currentLifePoints = maxLifePoints;
+    }
 
 }
